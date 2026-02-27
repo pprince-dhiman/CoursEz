@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom'
 
 const SearchBar = ({data}) => {
   const navigate = useNavigate();
-  const [input, setInput] = useState(data ? data : "");
+  const [searchedInput, setSearchedInput] = useState(data ? data : "");
+
   const onSearchHandler = (e) => {
     e.preventDefault();
-    navigate('/course-list/' + input);
+    navigate('/course-list/' + searchedInput); // '/courses-list/python'
   }
 
   return (
     <form onSubmit={onSearchHandler} className='max-w-xl w-full md:h-14 h-12 flex items-center bg-white border border-gray-500/20 rounded'>
       <img src={assets.search_icon} alt="search_icon" className='md:w-auto w-10 px-3' />
-      <input onChange={(e)=> setInput(e.target.value)} 
-        type="text" value={input}
+      <input onChange={(e)=> setSearchedInput(e.target.value)} 
+        type="text" value={searchedInput}
         placeholder='Search for courses'
         className='w-full h-full outline-none text-gray-500/80'
       />

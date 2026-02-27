@@ -1,12 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { assets } from "../../assets/assets.js"
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
+import { useContext } from 'react';
+import { AppContext } from '../../context/context.jsx';
 
 const Navbar = () => {
   const isCourseListPage = location.pathname.includes('/course-list');
   const { openSignIn } = useClerk();
   const { user } = useUser();
   const navigate = useNavigate();
+  const {isEducator} = useContext(AppContext);
 
   return (
     <div className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${isCourseListPage ? 'bg-while' : 'bg-cyan-100/70'}`} >
@@ -19,7 +22,7 @@ const Navbar = () => {
           {
             user &&
             <>
-              <button>Become Educator</button> |
+              <button onClick={()=>navigate('/educator')}>{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button> |
               <Link to='/my-enrollments'>My Enrollments</Link>
             </>
           }
