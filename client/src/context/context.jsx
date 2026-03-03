@@ -8,10 +8,15 @@ export const AppContextProvider = (props) => {
     const currency = import.meta.env.VITE_CURRENCY;
     const [allCourses, setAllCourses] = useState([]);
     const [isEducator, setIsEducator] = useState(true);
+    const [enrolledCourses, setEnrolledCourses] = useState([]);
 
     // fetch all courses
     const fetchAllCourses = async () => {
         setAllCourses(dummyCourses);
+    }
+    // fetch user enrolled courses
+    const fetchUserEnrolledCourses = async() => {
+        setEnrolledCourses(dummyCourses);
     }
 
     // Function to calculate avg rating of course
@@ -59,12 +64,13 @@ export const AppContextProvider = (props) => {
 
     useEffect(() => {
         fetchAllCourses();
+        fetchUserEnrolledCourses();
     }, []);
 
     const value = {
         currency, allCourses, calculateRating,
         isEducator, setIsEducator, calculateChapterTime,
-        calculateCourseDuration, calculateNoOfLectures
+        calculateCourseDuration, calculateNoOfLectures,enrolledCourses, fetchUserEnrolledCourses
     }
 
     return (
