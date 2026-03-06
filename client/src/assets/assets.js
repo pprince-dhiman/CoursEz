@@ -280,7 +280,7 @@ export const dummyCourses = [
                 "_id": "6773e37360cb0ab974342314"
             }
         ],
-        "createdAt": "2024-12-17T08:16:53.622Z",
+        "createdAt": "2024-12-18T08:16:53.622Z",
         "updatedAt": "2025-01-02T04:47:44.701Z",
         "__v": 4,
         "courseThumbnail": "https://img.youtube.com/vi/CBWnBi-awSA/maxresdefault.jpg"
