@@ -12,6 +12,8 @@ import MyCourses from "./pages/educator/MyCourses.jsx"
 import StudentEnrolled from "./pages/educator/StudentEnrolled.jsx"
 import Navbar from "./components/student/Navbar.jsx"
 import Footer from "./components/student/Footer.jsx"
+// importing styling for text editor to use in educator's add course page.
+import "quill/dist/quill.snow.css";
 
 const App = () => {
   const isEducatorRoute = useMatch('/educator/*');
