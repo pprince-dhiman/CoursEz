@@ -17,6 +17,7 @@ app.use(clerkMiddleware());
 // Routes
 app.get('/', (_, res) => { res.send("API is working"); });
 app.post('/clerk-webhooks', clerkWebhooks);
+
 app.use('/api/educator', educatorRouter);
 
 // connections 
