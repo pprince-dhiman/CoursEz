@@ -1,8 +1,8 @@
 import { clerkClient } from "@clerk/express"
 
-export const updateRoleToEducator = async(req, res) => {
-    try{
-        const {userId} = req.auth();
+export const updateRoleToEducator = async (req, res) => {
+    try {
+        const { userId } = req.auth();
         console.log(userId);
 
         await clerkClient.users.updateUserMetadata(userId, {
@@ -11,9 +11,18 @@ export const updateRoleToEducator = async(req, res) => {
             }
         });
 
-        res.json({success: true, message: "You can publish a course now."});
+        res.json({ success: true, message: "You can publish a course now." });
     }
-    catch(err){
+    catch (err) {
+        res.json({ success: false, message: err.message });
+    }
+}
+
+// Add New Course
+const addCourse = async (req, res) => {
+    try {
+        
+    } catch (err) {
         res.json({success: false, message: err.message});
     }
 }
