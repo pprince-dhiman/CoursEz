@@ -7,6 +7,7 @@ import educatorRouter from "./routes/educatorRoute.js";
 import { clerkMiddleware } from "@clerk/express";
 import connectCloudinary from "./configs/cloudinary.js";
 import courseRouter from "./routes/courseRoute.js";
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -22,21 +23,25 @@ app.post('/clerk-webhooks', clerkWebhooks);
 
 app.use('/api/educator', educatorRouter);
 app.use('/api/course', courseRouter);
+app.use('/api/user', userRouter);
 
 // connections 
 const initConnection = async () => {
-    await connectDB()
-        .then(async () => {
-            console.log("Connect to DB");
-            await connectCloudinary()
-                .then(() => {
-                    console.log("Connected to cloudinary.");
-                    app.listen(PORT, () => {
-                        console.log("listening on ", PORT);
-                    });
-                })
-        })
-        .catch((err) => console.log(err));
-}
+    try {
+        await connectDB();
+        console.log("Connected to MongoDB.");
+
+        await connectCloudinary();
+        console.log("Connected to Cloudinary.");
+
+        app.listen(PORT, () => {
+            console.log("Server running on", PORT);
+        });
+
+    } catch (err) {
+        console.error("Startup failed:", err.message);
+        process.exit(1);
+    }
+};
 
 initConnection();

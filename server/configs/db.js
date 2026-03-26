@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 
-const connectDB = async() => {
-    try{
+const connectDB = async () => {
+    try {
         await mongoose.connect(`${process.env.MONGO_URI}/LMS`);
+
     }
-    catch(err){
+    catch (err) {
         console.log("Error in DB connection: ", err);
+        throw new Error(err);
     }
 }
 
