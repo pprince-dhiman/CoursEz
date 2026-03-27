@@ -2,7 +2,6 @@ import { Webhook } from "svix"
 import User from "../models/User.js"
 import Stripe from "stripe";
 import Purchase from "../models/Purchase.js";
-import User from "../models/User.js";
 import Course from "../models/Course.js";
 
 // controller to manage clerk user with DB
@@ -97,7 +96,7 @@ export const stripeWebhooks = async (request, response) => {
 
             break;
         }
-        
+
         case 'payment_intent.payment_failed': {
             const paymentIntent = event.data.object;
             const paymentIntentId = paymentIntent.id;
