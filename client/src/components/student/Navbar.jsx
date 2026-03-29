@@ -1,23 +1,54 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { assets } from "../../assets/assets.js"
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '../../context/context.jsx';
-
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const location = useLocation();
-  
+
   const isCourseListPage = location.pathname.includes('/course-list');
   const { openSignIn } = useClerk();
   const { user } = useUser();
   const navigate = useNavigate();
-  const {isEducator} = useContext(AppContext);
+  const { isEducator, VITE_BACKEND_URL, setIsEducator, getToken } = useContext(AppContext);
+
+  const [loading, setLoading] = useState(false);
+
+  const becomeEducator = async () => {
+    // If user is already an educator.
+    if (isEducator) {
+      navigate('/educator/dashboard');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const token = await getToken();
+      // console.log("Token: ", token);
+      const { data } = await axios.post(`${VITE_BACKEND_URL}/api/educator/update-role`, {},  {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // console.log(data);
+      if (data.success) {
+        setIsEducator(true);
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className={`flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-gray-500 py-4 ${isCourseListPage ? 'bg-while' : 'bg-cyan-100/70'}`} >
-      <div className='cursor-pointer flex items-center gap-2'  onClick={()=> navigate('/')}>
-        <img src="/favicon.webp" alt="nav-logo" className='lg:h-8 h-7'/>
+      <div className='cursor-pointer flex items-center gap-2' onClick={() => navigate('/')}>
+        <img src="/favicon.webp" alt="nav-logo" className='lg:h-8 h-7' />
         <span className='text-2xl font-semibold text-blue-600'>CoursEz</span>
       </div>
       <div className='hidden md:flex items-center gap-5 text-gray-500'>
@@ -25,7 +56,10 @@ const Navbar = () => {
           {
             user &&
             <>
-              <button onClick={()=>navigate('/educator/educator')}>{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button> |
+              <button onClick={becomeEducator} disabled={loading}
+               className={ (!isEducator) ? 'border rounded-md px-3 py-1 border-gray-400 hover:bg-blue-600 hover:text-white hover:border-none' : ''}>
+                {(isEducator) ? ('Educator Dashboard') : (loading?'Making...':'Become Educator')}
+              </button> |
               <Link to='/my-enrollments'>My Enrollments</Link>
             </>
           }
@@ -47,14 +81,17 @@ const Navbar = () => {
           {
             user &&
             <>
-              <button onClick={()=>navigate('/educator/educator')}>{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button> |
+              <button onClick={becomeEducator} disabled={loading}
+               className={ (!isEducator) ? 'border rounded-md px-2 py-0.5 border-gray-400 hover:bg-blue-600 hover:text-white hover:border-none' : ''}>
+                {(isEducator) ? ('Educator Dashboard') : (loading?'Making...':'Become Educator')}
+              </button> |
               <Link to='/my-enrollments'>My Enrollments</Link>
             </>
           }
         </div>
         {
           user ? <UserButton /> :
-            <button onClick={()=> openSignIn()}><img src={assets.user_icon} alt="user_icon" /></button>
+            <button onClick={() => openSignIn()}><img src={assets.user_icon} alt="user_icon" /></button>
         }
 
       </div>

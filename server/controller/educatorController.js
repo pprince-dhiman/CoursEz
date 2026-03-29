@@ -7,6 +7,7 @@ import Purchase from "../models/Purchase.js";
 export const updateRoleToEducator = async (req, res) => {
     try {
         const { userId } = req.auth();
+        console.log("req auth: ", req.auth())
         console.log(userId);
 
         await clerkClient.users.updateUserMetadata(userId, {
@@ -72,7 +73,7 @@ export const educatorDashboardData = async (req, res) => {
         // calculate total earning from purchase
         const purchases = await Purchase.find({
             courseId: { $in: courseIds },
-            status: completed
+            status: 'completed'
         });
 
         const totalEarning = purchases.reduce((sum, purchase) => sum + purchase.amount, 0);
@@ -118,11 +119,13 @@ export const getEnrolledStudentsData = async (req, res) => {
             status: 'completed'
         }).populate('userId', 'name imageUrl').populate('courseId', 'courseTitle');
 
-        const enrolledStudents = purchases.map((purchase) => ({
-            student: purchase.userId,
-            courseTitle: purchase.courseId.courseTitle,
-            purchasedDate: purchase.createdAt,
-        }));
+        const enrolledStudents = purchases.map((purchase) => (
+            {
+                student: purchase.userId,
+                courseTitle: purchase.courseId.courseTitle,
+                purchasedDate: purchase.createdAt,
+            }
+        ));
 
         res.json({ success: true, enrolledStudents });
     }

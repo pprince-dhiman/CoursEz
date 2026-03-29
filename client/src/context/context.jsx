@@ -1,27 +1,83 @@
 import { createContext, useEffect, useState } from "react";
-import { dummyCourses } from "../assets/assets";
 import humanizeDuration from "humanize-duration";
-import {useAuth, useUser} from "@clerk/clerk-react"
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
     const currency = import.meta.env.VITE_CURRENCY;
+    const { VITE_BACKEND_URL } = import.meta.env;
 
-    const {getToken} = useAuth();
-    const {user} = useUser();
+    const { getToken } = useAuth();
+
+    const logToken = async () => {
+        console.log(await getToken());
+    }
+
+    const { user } = useUser();
 
     const [allCourses, setAllCourses] = useState([]);
-    const [isEducator, setIsEducator] = useState(true);
+    const [isEducator, setIsEducator] = useState(false);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [userData, setUserData] = useState(null);
 
     // fetch all courses
     const fetchAllCourses = async () => {
-        setAllCourses(dummyCourses);
+        try {
+            const { data } = await axios.get(`${VITE_BACKEND_URL}/api/course/all`);
+
+            if (data.success) {
+                setAllCourses(data.allCourses);
+            } else {
+                toast.error(data.message);
+            }
+        }
+        catch (err) {
+            toast.error(err.message);
+        }
     }
+
+    // fetch user data
+    const fetchUserData = async () => {
+        if (user.publicMetadata.role === 'educator') {
+            setIsEducator(true);
+        }
+
+        try {
+            const token = await getToken();
+            const { data } = await axios.get(`${VITE_BACKEND_URL}/api/user/data`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (data.success) {
+                setUserData(data.user);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (err) {
+            toast.error(err.message);
+        }
+    }
+
     // fetch user enrolled courses
-    const fetchUserEnrolledCourses = async() => {
-        setEnrolledCourses(dummyCourses);
+    const fetchUserEnrolledCourses = async () => {
+        const token = await getToken();
+        try {
+            const { data } = await axios.get(`${VITE_BACKEND_URL}/api/user/enrolled-courses`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (data.success) {
+                setEnrolledCourses(data.enrolledCourses.reverse());
+            } else {
+                toast.error(data.message);
+            }
+
+        } catch (err) {
+            toast.error(err.message);
+        }
     }
 
     // Function to calculate avg rating of course
@@ -33,7 +89,7 @@ export const AppContextProvider = (props) => {
         course.courseRatings.forEach((rating) => {
             totalRating += rating.rating;
         })
-        return totalRating / course.courseRatings.length;
+        return Math.floor(totalRating / course.courseRatings.length);
     }
 
     // function to calculate chapter time.
@@ -69,23 +125,20 @@ export const AppContextProvider = (props) => {
 
     useEffect(() => {
         fetchAllCourses();
-        fetchUserEnrolledCourses();
-    }, []);
-
-    const logToken = async() => {
-        console.log(await getToken());
-    }
+    }, [allCourses]);
 
     useEffect(() => {
-        if(user){
-            logToken();
+        if (user) {
+            fetchUserData();
+            fetchUserEnrolledCourses();
         }
     }, [user]);
 
     const value = {
         currency, allCourses, calculateRating,
         isEducator, setIsEducator, calculateChapterTime,
-        calculateCourseDuration, calculateNoOfLectures,enrolledCourses, fetchUserEnrolledCourses
+        calculateCourseDuration, calculateNoOfLectures, enrolledCourses, fetchUserEnrolledCourses, VITE_BACKEND_URL, userData, setUserData,
+        getToken, fetchAllCourses
     }
 
     return (

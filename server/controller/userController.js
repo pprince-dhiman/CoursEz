@@ -8,7 +8,7 @@ import CourseProgress from "../models/courseProgress.js";
 export const getUserData = async (req, res) => {
     try {
         const { userId } = req.auth();
-        console.log(userId);
+        // console.log(userId);
         const user = await User.findById(userId);
 
         if (!user) {
@@ -50,9 +50,10 @@ export const purchaseCourse = async (req, res) => {
             return res.json({ success: false, message: "Data not found." });
         }
 
-        const amount = (courseData.coursePrice - (courseData.discount * courseData.coursePrice / 100)).toFixed(2);
+        const calAmount = courseData.coursePrice - (courseData.discount * courseData.coursePrice / 100);
+        const finalAmount = Number(calAmount.toFixed(2));
 
-        const purchasedData = { courseId, userId, amount };
+        const purchasedData = { courseId, userId, amount: finalAmount };
         const newCoursePurchase = await Purchase.create(purchasedData);
 
         // stripe gateway initialized
@@ -65,7 +66,7 @@ export const purchaseCourse = async (req, res) => {
                 product_data: {
                     name: courseData.courseTitle
                 },
-                unit_amount: Math.floor(newCoursePurchase.amount) * 100
+                unit_amount: Math.round(finalAmount * 100)
             },
             quantity: 1
         }]
@@ -81,7 +82,7 @@ export const purchaseCourse = async (req, res) => {
             }
         });
 
-        console.log("Session: ", session);
+        // console.log("Session: ", session);
 
         res.json({ success: true, session_url: session.url });
 
@@ -123,7 +124,7 @@ export const updateUserCourseProgress = async (req, res) => {
 export const getUserCourseProgress = async (req, res) => {
     try {
         const { userId } = req.auth();
-        const { courseId } = req.body;
+        const { courseId } = req.body; 
 
         const progressData = await CourseProgress.findOne({ userId, courseId });
 

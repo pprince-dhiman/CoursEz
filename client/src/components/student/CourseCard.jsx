@@ -14,7 +14,7 @@ const CourseCard = ({ course }) => {
 
       <div className='p-3 text-left'>
         <h3 className='text-base font-bold'>{course.courseTitle}</h3>
-        <p className='text-gray-500'>Prince Dhiman</p>
+        <p className='text-gray-500'>{course.educator.name}</p>
         <div className='flex items-center space-x-2'>
           {/* Average rating of course as per all students rating */}
           <p>{calculateRating(course)}</p>

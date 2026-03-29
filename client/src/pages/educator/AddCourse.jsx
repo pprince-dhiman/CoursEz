@@ -3,8 +3,14 @@ import uniqid from 'uniqid'
 import Quill from 'quill' // for rich text editor
 import { assets } from '../../assets/assets';
 import { dummyCourses } from '../../assets/assets';
+import { useContext } from 'react';
+import { AppContext } from '../../context/context';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const AddCourse = () => {
+  const { VITE_BACKEND_URL, getToken } = useContext(AppContext);
+
   const quillRef = useRef(null);
   const editorRef = useRef(null);
 
@@ -94,8 +100,46 @@ const AddCourse = () => {
     });
   }
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+
+      if(!image){
+        toast.error("Thumbnail not selected.");
+        return ;
+      }
+
+      const courseData = {
+        courseTitle, 
+        courseDescription: quillRef.current.root.innerHTML,
+        coursePrice: Number(coursePrice),
+        discount: Number(discount),
+        courseContent: chapters,
+      }
+
+      const formData = new FormData();
+      formData.append('courseData', JSON.stringify(courseData));
+      formData.append('image', image);
+
+      const token = await getToken();
+      const { data } = await axios.post(`${VITE_BACKEND_URL}/api/educator/add-course`, formData, { headers: { Authorization: `Bearer ${token}`}});
+
+      if(data.success){
+        toast.success(data.message);
+        setCourseTitle('');
+        setCoursePrice(0);
+        setDiscount(0);
+        setImage(null);
+        setChapters([]);
+        quillRef.current.root.innerHTML='';
+      }
+      else{
+        toast.error(data.message);
+      }
+    }
+    catch (err) {
+      toast.error(err.message);
+    }
   }
 
   useEffect(() => {
