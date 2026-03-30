@@ -73,8 +73,8 @@ export const purchaseCourse = async (req, res) => {
 
         // Create payment session
         const session = await stripeInstance.checkout.sessions.create({
-            success_url: `https://coursez-flax.vercel.app/loading/my-enrollments`,
-            cancel_url: `https://coursez-flax.vercel.app/`,
+            success_url: `${origin}/loading/my-enrollments`,
+            cancel_url: `${origin}/`,
             line_items,
             mode: 'payment',
             metadata: {
@@ -124,7 +124,7 @@ export const updateUserCourseProgress = async (req, res) => {
 export const getUserCourseProgress = async (req, res) => {
     try {
         const { userId } = req.auth();
-        const { courseId } = req.body;
+        const { courseId } = req.body; 
 
         const progressData = await CourseProgress.findOne({ userId, courseId });
 
@@ -150,20 +150,20 @@ export const addUserRating = async (req, res) => {
         }
 
         const userData = await User.findById(userId);
-        if (!userData || !userData.enrolledCourses.includes(courseId)) {
-            return res.json({ success: false, message: "You are not enrolled to this course." });
+        if(!userData || !userData.enrolledCourses.includes(courseId)){
+            return res.json({success: false, message: "You are not enrolled to this course."});
         }
 
         let found = false;
-        for (const ratingData of courseData.courseRatings) {
-            if (ratingData.userId === userId) {
+        for(const ratingData of courseData.courseRatings){
+            if(ratingData.userId === userId){
                 ratingData.rating = rating;
                 found = true;
                 break;
             }
         }
 
-        if (!found) courseData.courseRatings.push({ userId, rating });
+        if(!found) courseData.courseRatings.push({ userId, rating });
 
         await courseData.save();
 
