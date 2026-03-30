@@ -19,6 +19,7 @@ const AddCourse = () => {
   const [discount, setDiscount] = useState(0);
   const [image, setImage] = useState(null);
   const [chapters, setChapters] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
 
   const [showPopUp, setShowPopUp] = useState(false);
 
@@ -108,6 +109,7 @@ const AddCourse = () => {
         toast.error("Thumbnail not selected.");
         return ;
       }
+      setIsAdding(true);
 
       const courseData = {
         courseTitle, 
@@ -139,6 +141,9 @@ const AddCourse = () => {
     }
     catch (err) {
       toast.error(err.message);
+    }
+    finally{
+      setIsAdding(false);
     }
   }
 
@@ -278,8 +283,9 @@ const AddCourse = () => {
           }
         </div>
 
-        <button type='submit' className='bg-gray-800 px-4 py-2 w-20 rounded text-white mx-auto my-5'>
-          ADD
+        <button disabled={isAdding}
+        type='submit' className={`${isAdding ? 'cursor-not-allowed bg-gray-600': 'bg-gray-800'}  px-4 py-2 w-20 rounded text-white mx-auto my-5`}>
+          { isAdding ? 'Adding...' : 'ADD' }
         </button>
       </form>
     </div>
