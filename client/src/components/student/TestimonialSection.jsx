@@ -1,16 +1,16 @@
-import { assets, dummyTestimonial } from '../../assets/assets'
+import { assets, testimonials } from '../../assets/assets'
 
 const TestimonialSection = () => {
 
   return (
-    <div className='pb-14 px-8 md:px-0'>
+    <div className='pb-14 px-8 md:px-0 max-sm:hidden'>
       <h2 className='text-3xl font-medium text-gray-800'>Testimonials</h2>
       <p className='md:text-base text-gray-500 mt-3'>Hear from our learner as they share thier journey of transformation, success, and how our <br />platform has made a difference between in their lives.</p>
       <div className='flex items-center justify-center px-20 md:px-40'>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-14 px-auto'>
           {
-            dummyTestimonial.map((testimonial, idx) => (
-              <div key={idx} className='text-sm text-left border border-gray-500/30 pb-6 rounded-lg bg-white shadow-md shadow-black/5 overflow-hidden'>
+            testimonials.map((testimonial, idx) => (
+              <div key={idx} className='text-sm text-left border border-gray-500/30 pb-6 rounded-lg bg-white shadow-sm shadow-black/5 overflow-hidden hover:scale-[101%] transition-all duration-300 hover:shadow-md'>
                 <div className='flex items-center gap-4 px-5 py-4 bg-gray-500/10'>
                   <img className='h-12 w-12 rounded-full' src={testimonial.image} alt={testimonial.name} />
                   <div>
@@ -27,7 +27,7 @@ const TestimonialSection = () => {
                   </div>
                   <p className='text-gray-500 mt-5'>{testimonial.feedback}</p>
                 </div>
-                <a href="#" className='text-blue-500 underline px-5'>Read More</a>
+                {/* <a href="#" className='text-blue-500 underline px-5'>Read More</a> */}
               </div>
             ))
           }

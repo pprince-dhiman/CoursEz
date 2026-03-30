@@ -60,7 +60,9 @@ const Navbar = () => {
                className={ (!isEducator) ? 'border rounded-md px-3 py-1 border-gray-400 hover:bg-blue-600 hover:text-white hover:border-none' : ''}>
                 {(isEducator) ? ('Educator Dashboard') : (loading?'Making...':'Become Educator')}
               </button> |
-              <Link to='/my-enrollments'>My Enrollments</Link>
+              <Link to='/my-enrollments' 
+                className='border border-black text-[#2c2f68] py-1 px-2 rounded-md shadow-sm  hover:text-white hover:bg-gray-600'
+              >My Enrollments</Link>
             </>
           }
 

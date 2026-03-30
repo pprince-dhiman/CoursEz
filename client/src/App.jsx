@@ -16,9 +16,11 @@ import { ToastContainer } from "react-toastify";
 
 // importing styling for text editor to use in educator's add course page.
 import "quill/dist/quill.snow.css";
+import About from "./pages/student/About.jsx"
 
 const App = () => {
   const isEducatorRoute = useMatch('/educator/*');
+  const isAboutPage = useMatch('/about');
   return (
     <div className="text-default min-h-screen bg-white">
       <ToastContainer />
@@ -26,6 +28,7 @@ const App = () => {
 
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
         <Route path='/course-list' element={<CoursesList />} />
         <Route path='/course-list/:input' element={<CoursesList />} />
 
@@ -41,7 +44,7 @@ const App = () => {
           <Route path="student-enrolled" element={<StudentEnrolled />} />
         </Route>
       </Routes>
-      {!isEducatorRoute && <Footer />}
+      {!isEducatorRoute && !isAboutPage && <Footer />}
     </div>
   )
 }

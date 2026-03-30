@@ -101,27 +101,27 @@ export const dummyEducatorData = {
     "__v": 0
 }
 
-export const dummyTestimonial = [
+export const testimonials = [
     {
-        name: 'Donald Jackman',
-        role: 'SWE 1 @ Amazon',
+        name: 'Aarav Sharma',
+        role: 'Frontend Developer Intern',
         image: assets.profile_img_1,
         rating: 5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'I purchased the JavaScript course thinking it would be just another basic tutorial, but it turned out to be much more structured. The way concepts like closures and async programming were explained really helped me build confidence.',
     },
     {
-        name: 'Richard Nelson',
-        role: 'SWE 2 @ Samsung',
+        name: 'Rohan Mehta',
+        role: 'Career Switcher – Non-Tech to IT',
         image: assets.profile_img_2,
         rating: 4,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'Coming from a non-technical background, I was honestly intimidated by programming. I started with the JavaScript course, and the beginner-friendly approach made things much easier. The real-life examples and small projects kept me engaged.',
     },
     {
-        name: 'James Washington',
+        name: 'Ajay Vishwakarma',
         role: 'SWE 2 @ Google',
         image: assets.profile_img_3,
         rating: 4.5,
-        feedback: 'I\'ve been using Imagify for nearly two years, primarily for Instagram, and it has been incredibly user-friendly, making my work much easier.',
+        feedback: 'I took both the JavaScript and C++ courses to expand my skillset. What I liked most was the clarity and pace—nothing felt rushed. The assignments were practical, not just theory-based. After finishing, I started taking small freelance projects, and I’m finally earning from skills I learned online.',
     },
 ];
 

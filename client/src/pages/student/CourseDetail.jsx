@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/context';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import Loading from '../../components/student/Loading';
 import { assets } from '../../assets/assets';
 import humanizeDuration from 'humanize-duration';
@@ -11,11 +11,13 @@ import { toast } from 'react-toastify';
 const CourseDetail = () => {
   const { id } = useParams();
   const { allCourses, calculateRating, calculateChapterTime, calculateCourseDuration, calculateNoOfLectures, currency, VITE_BACKEND_URL, userData, getToken } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({});
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
   const [playerData, setPlayerData] = useState(null);
+  const [enrolling, setEnrolling] = useState(false);
 
   const fetchCourseData = async () => {
     try {
@@ -39,6 +41,7 @@ const CourseDetail = () => {
         return toast.warn("Already Enrolled.");
       }
 
+      setEnrolling(true);
       const courseId = courseData._id;
       const token = await getToken();
       const { data } = await axios.post(`${VITE_BACKEND_URL}/api/user/purchase`, { courseId }, { headers: { Authorization: `Bearer ${token}` } });
@@ -53,6 +56,9 @@ const CourseDetail = () => {
     }
     catch (err) {
       toast.error(err.message);
+    }
+    finally{
+      setEnrolling(false);
     }
   }
 
@@ -109,6 +115,19 @@ const CourseDetail = () => {
         </div>
 
         <p>Course by <span className='text-blue-600 underline'>Prince Dhiman</span></p>
+
+        {
+          isAlreadyEnrolled && (
+            <div className='flex justify-end'>
+              <button
+                onClick={() => navigate('/player/' + courseData._id)}
+                className='bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] rounded-md px-5 py-2 mt-7'>
+                Start Course
+              </button>
+              {/* <Link to={'/player/'+courseData._id}}></Link> */}
+            </div>
+          )
+        }
 
         <div className='pt-8 text-gray-800'>
           <h2 className='text-xl font-semibold'>Course Structure</h2>
@@ -213,9 +232,14 @@ const CourseDetail = () => {
             </div>
           </div>
 
-          <button onClick={enrollCourse}
-            className='md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium'>
-            {isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}
+          <button
+            onClick={enrollCourse}
+            disabled={isAlreadyEnrolled || enrolling}
+            className={`md:mt-6 mt-4 w-full py-3 rounded font-medium transition-all duration-200 ${isAlreadyEnrolled || enrolling ?
+              'bg-gray-400 text-gray-700 cursor-not-allowed' :
+              'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98]'
+              } `}>
+            {isAlreadyEnrolled ? ('Already Enrolled') : (enrolling ? 'Enrolling...' : 'Enroll Now')}
           </button>
 
           <div className='pt-6'>

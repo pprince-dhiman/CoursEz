@@ -11,16 +11,16 @@ const Footer = () => {
             <span className='text-2xl font-semibold text-white'>CoursEz</span>
           </div>
           <p className='mt-6 text-center md:text-left text-sm text-white/80'>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-            Lorem Ipsum has been the industry's standard dummy text.
+            Enroll in courses, follow structured learning paths, and gain practical
+            knowledge from experienced instructors.
           </p>
         </div>
 
         <div className='flex flex-col md:items-start items-center w-full'>
           <h2 className='font-semibold text-white mb-5'>Company</h2>
           <ul className='flex md:flex-col w-full justify-between text-sm text-white/80 md:space-y-2'>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
+            <li><Link to='/' onClick={()=> scrollTo(0,0)}>Home</Link></li>
+            <li><Link to='/about' onClick={()=> scrollTo(0,0)}>About us</Link></li>
             <li><a href="#">Contact us</a></li>
             <li><a href="#">Privacy policy</a></li>
           </ul>
