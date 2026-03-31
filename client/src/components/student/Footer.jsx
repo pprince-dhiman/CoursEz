@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom"
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 const Footer = () => {
   return (
@@ -19,10 +21,9 @@ const Footer = () => {
         <div className='flex flex-col md:items-start items-center w-full'>
           <h2 className='font-semibold text-white mb-5'>Company</h2>
           <ul className='flex md:flex-col w-full justify-between text-sm text-white/80 md:space-y-2'>
-            <li><Link to='/' onClick={()=> scrollTo(0,0)}>Home</Link></li>
-            <li><Link to='/about' onClick={()=> scrollTo(0,0)}>About us</Link></li>
-            <li><a href="#">Contact us</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><Link to='/' onClick={() => scrollTo(0, 0)}>Home</Link></li>
+            <li><Link to='/about' onClick={() => scrollTo(0, 0)}>About us</Link></li>
+            <li><p>contact: dhimanprince55555@gmail.com</p></li>
           </ul>
         </div>
 
@@ -43,7 +44,31 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p className="py-4 text-center text-xs md:text-sm text-white/60">Copyright 2025 &copy; CoursEz. All Right Reserved.</p>
+      <div className="flex justify-around items-center max-w-3xl mx-auto">
+        <p className="py-4 text-center text-xs md:text-sm text-white/60">Copyright 2025 &copy; CoursEz. All Right Reserved.</p>
+        <div className="flex space-x-7 justify-center items-center text-white">
+          <a
+            href="https://github.com/pprince-dhiman/"
+            target="_blank"
+            className="hover:scale-[95%] transition-all duration-200"
+          >
+            <FaGithub size={24} />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/prince-kumar-980654291/" target="_blank"
+            className="hover:scale-[95%] transition-all duration-200"
+          >
+            <FaLinkedin size={24} />
+          </a>
+          <a
+            href="https://x.com/PrinceK9535221"
+            target="_blank"
+            className="hover:scale-[95%] transition-all duration-200"
+          >
+            <FaSquareXTwitter size={24} />
+          </a>
+        </div>
+      </div>
     </footer>
   )
 }
