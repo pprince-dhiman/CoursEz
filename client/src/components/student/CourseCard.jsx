@@ -10,7 +10,7 @@ const CourseCard = ({ course }) => {
     <Link to={`/course/${course._id}`} onClick={() => scrollTo(0, 0)}
       className='border border-gray-500/30 pb-6 overflow-hidden rounded-lg hover:scale-[101%] hover:shadow-md transition-all duration-200'>
       <img src={course.courseThumbnail}
-        className='w-full' />
+        className='w-full h-[70%] object-cover ' />
 
       <div className='p-3 text-left'>
         <h3 className='text-base font-bold'>{course.courseTitle}</h3>
@@ -22,7 +22,6 @@ const CourseCard = ({ course }) => {
           <div className='flex'>
             {[...Array(5)].map((_, i) => (<img key={i} src={i < calculateRating(course) ? assets.star : assets.star_blank} className='w-3.5 h-3.5' />))}
           </div>
-          <p className='text-gray-500'>22</p>
         </div>
         <p className='text-gray-800 font-semibold text-base'>{currency}{(course.coursePrice - course.discount * course.coursePrice / 100).toFixed(2)}</p>
       </div>

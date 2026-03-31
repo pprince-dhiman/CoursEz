@@ -3,68 +3,91 @@ import { AppContext } from '../../context/context';
 import Loading from '../../components/student/Loading';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const MyCourses = () => {
   const { currency, VITE_BACKEND_URL, isEducator, getToken } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const [courses, setCourses] = useState(null);
 
   const fetchEducatorCourses = async () => {
-    try{
+    try {
       const token = await getToken();
-      const {data} = await axios.get(`${VITE_BACKEND_URL}/api/educator/courses`, {
-        headers: { Authorization: `Bearer ${token}`}
+      const { data } = await axios.get(`${VITE_BACKEND_URL}/api/educator/courses`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
 
-      if(data.success){
+      if (data.success) {
         setCourses(data.courses);
       } else {
         toast.error(data.message);
       }
     }
-    catch(err){
+    catch (err) {
       toast.error(err.message);
     }
   }
 
   useEffect(() => {
-    if(isEducator)
-      fetchEducatorCourses();    
+    if (isEducator)
+      fetchEducatorCourses();
   }, [courses, isEducator]);
 
   return courses ? (
     <div className='h-screen flex flex-col items-start justify-between md:p-8 pb-0 p-4 pt-8 '>
       <div className='w-full'>
         <h2 className='pb-4 text-lg font-medium'>My Courses</h2>
-        <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20'>
-          <table className='md:table-auto table-fixed w-full overflow-hidden'>
-            <thead className='text-gray-900 border-b border-gray-500/50 text-sm text-left '>
-              <tr>
-                <th className='px-4 py-3 font-semibold truncate'>All Courses</th>
-                <th className='px-4 py-3 font-semibold truncate'>Earnings</th>
-                <th className='px-4 py-3 font-semibold truncate'>Students</th>
-                <th className='px-4 py-3 font-semibold truncate'>Published On</th>
-              </tr>
-            </thead>
 
-            <tbody className='text-sm text-gray-500 '>
-              {courses.map((course, idx) => (
-                <tr key={idx} className='border-b border-gray-500/20'>
-                  <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
-                    <img src={course.courseThumbnail} alt="course_thumbnail" className='w-16' />
-                    <span className="truncate hidden md:block">{course.courseTitle}</span>
-                  </td>
-                  <td className="px-4 py-3">
-                    {currency} {Math.floor(course.enrolledStudents.length * (course.coursePrice - course.discount * course.coursePrice / 100))}
-                  </td>
-                  <td className="px-4 py-3">{course.enrolledStudents.length}</td>
-                  <td className="px-4 py-3">{new Date(course.createdAt).toLocaleDateString()}</td>
-                </tr>
-              ))
-              }
-            </tbody>
-          </table>
-        </div>
+        {
+          courses.length === 0 ?
+            (<div className="w-full h-[50vh] flex items-center justify-center bg-gray-50 rounded-lg border mt-5">
+              <div className="text-center">
+                <h2 className="text-2xl md:text-3xl font-semibold text-gray-400">
+                  Not Created Yet
+                </h2>
+                <p className="mt-2 text-gray-400 text-sm md:text-base">
+                  As an educator, create your experties course.
+                </p>
+                <div onClick={() => navigate('/educator/add-course')}
+                  className='mt-3 text-blue-900 bg-blue-200 py-1 rounded-md cursor-pointer'>
+                  <button >Create</button>
+                </div>
+              </div>
+
+            </div>) :
+            (
+              <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20'>
+                <table className='md:table-auto table-fixed w-full overflow-hidden'>
+                  <thead className='text-gray-900 border-b border-gray-500/50 text-sm text-left '>
+                    <tr>
+                      <th className='px-4 py-3 font-semibold truncate'>All Courses</th>
+                      <th className='px-4 py-3 font-semibold truncate'>Earnings</th>
+                      <th className='px-4 py-3 font-semibold truncate'>Students</th>
+                      <th className='px-4 py-3 font-semibold truncate'>Published On</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className='text-sm text-gray-500 '>
+                    {courses.map((course, idx) => (
+                      <tr key={idx} className='border-b border-gray-500/20'>
+                        <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
+                          <img src={course.courseThumbnail} alt="course_thumbnail" className='w-16' />
+                          <span className="truncate hidden md:block">{course.courseTitle}</span>
+                        </td>
+                        <td className="px-4 py-3">
+                          {currency} {Math.floor(course.enrolledStudents.length * (course.coursePrice - course.discount * course.coursePrice / 100))}
+                        </td>
+                        <td className="px-4 py-3">{course.enrolledStudents.length}</td>
+                        <td className="px-4 py-3">{new Date(course.createdAt).toLocaleDateString()}</td>
+                      </tr>
+                    ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+            )
+        }
       </div>
     </div>
   ) :

@@ -90,10 +90,9 @@ const CourseDetail = () => {
         <h1 className='text-[24px] md:text-[36px] text-gray-800 font-semibold my-2 leading-9'>
           {courseData?.courseTitle}
         </h1>
-        <p className='pt-4 md:text-base text-sm'
-          dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}>
+        <p className='pt-4 md:text-base text-sm inline'
+          dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) + '...'}}>
         </p>
-
         {/* Review and ratings */}
 
         <div className='flex items-center space-x-2 pt-3 pb-2 text-sm'>
