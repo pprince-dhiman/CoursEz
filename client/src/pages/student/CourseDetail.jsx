@@ -119,7 +119,7 @@ const CourseDetail = () => {
           isAlreadyEnrolled && (
             <div className='flex justify-end'>
               <button
-                onClick={() => navigate('/player/' + courseData._id)}
+                onClick={() => {navigate('/player/' + courseData._id), scrollTo(0,0)}}
                 className='bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] rounded-md px-5 py-2 mt-7'>
                 Start Course
               </button>

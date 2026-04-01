@@ -7,7 +7,7 @@ const CourseSection = () => {
   const { allCourses } = useContext(AppContext);
 
   return (
-    <div className='pb-16 md:px-40 px-8'>
+    <div className="pb-16 md:px-40 px-8 bg-[url('/course-bg1.png')] bg-cover bg-center bg-no-repeat w-full">
       <h2 className='text-3xl font-medium text-gray-800'>Learn from the best</h2>
       <p className='text-sm md:text-base text-gray-500 mt-3'>Discover our top-rated courses across various categories. From coding and design <br/> to business and wellness, our courses are crafted to deliver results.</p>
 
@@ -22,7 +22,7 @@ const CourseSection = () => {
       <Link
         to={'/course-list'}
         onClick={() => scrollTo(0, 0)}
-        className='text-gray-500 border border-gray-500/30 px-10 py-3 rounded'
+        className='text-gray-100 border bg-gray-700 border-gray-500/30 px-10 py-3 rounded'
       >
         Show all courses
       </Link>

@@ -8,11 +8,11 @@ const CourseCard = ({ course }) => {
 
   return (
     <Link to={`/course/${course._id}`} onClick={() => scrollTo(0, 0)}
-      className='border border-gray-500/30 pb-6 overflow-hidden rounded-lg hover:scale-[101%] hover:shadow-md transition-all duration-200'>
+      className='border border-gray-500/30 pb-6 overflow-hidden rounded-lg hover:scale-[101%] hover:shadow-lg shadow-md transition-all duration-200 h-full'>
       <img src={course.courseThumbnail}
-        className='w-full h-[70%] object-cover ' />
+        className='w-full h-[70%] object-cover rounded-b-lg' />
 
-      <div className='p-3 text-left'>
+      <div className='p-3 text-left bg-gray-50 h-full'>
         <h3 className='text-base font-bold'>{course.courseTitle}</h3>
         <p className='text-gray-500'>{course.educator.name}</p>
         <div className='flex items-center space-x-2'>
