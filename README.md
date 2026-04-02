@@ -47,6 +47,7 @@ https://cours-ez-v1.vercel.app/
 
 ### Database
 - MongoDB Atlas  
+<img src="./client/src/assets/CoursEz-Models.png" width="500" />
 
 ### Other Services
 - Clerk (Authentication)  
